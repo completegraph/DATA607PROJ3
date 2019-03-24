@@ -1,0 +1,83 @@
+---
+title: "DS607_Project3_Part2_JagdishChhabria"
+author: "Jagdish Chhabria"
+date: "March 23, 2019"
+output: pdf_document
+---
+
+The following section collects the inputs: regional percentage share of Artificial Intelligence publications over the 1998-2017 period. The data is loaded and tidied from a wide format to a long format, setting it up for further analysis.
+
+```{r }
+library(XML)
+library(xml2)
+library(RCurl)
+library(rvest)
+library(dplyr)
+library(httr)
+library(stringr)
+library(data.table)
+library(readxl)
+library(tidyr)
+library(rlang)
+
+#fileurl<-"https://raw.githubusercontent.com/completegraph/DATA607PROJ3/master/Code/author-info-ds.csv"
+fileurl<-"C:\\Jagdish\\Masters Programs\\CUNY\\Data 607 Data Acquisition and Management\\Project3\\Regional Share of AI Publications.xlsx"
+
+regional.ai<-read_excel(fileurl)
+#regional.ai
+regional.ai.long<-gather(regional.ai, key="Year", value=Percentage_Share, 2:21)
+#regional.ai.long
+
+
+```
+
+## Countries as Thought Leaders
+The following section shows a regional breakdown of AI papers published on Scopus for the uears 1998-2017. The source of this data is Elsevier. The broad regional categories are: USA, Europe, China and Rest of World (RoW). Based on this, it can be seen that Europe is the leading contributor to papers and publications in this domain over the years followed closely by RoW. China can be seen steadily increasing its share of research publications in this area. Based on this metric, Europe can be considered as the Thought Leader from a regional perspective.
+
+```{r}
+
+ggplot(regional.ai.long, aes(x=Year, y=Percentage_Share, fill=Region)) +
+geom_bar(stat="identity", colour="black") +
+guides(fill=guide_legend(reverse=TRUE)) +
+scale_fill_brewer(palette="Pastel1") + theme(text = element_text(size=11),axis.text.x = element_text(angle=90, hjust=1))
+
+```
+
+## Percentage of AI and ML course enrollments in US Universities at the Undergraduate Level
+
+```{r}
+
+library(RCurl)
+library(rvest)
+library(dplyr)
+library(httr)
+library(stringr)
+library(data.table)
+library(readxl)
+library(tidyr)
+library(rlang)
+
+fileurl2<-"C:\\Jagdish\\Masters Programs\\CUNY\\Data 607 Data Acquisition and Management\\Project3\\US AI-ML Undergrad Enrolment Percentage.xlsx"
+
+undergrad<-read_excel(fileurl2)
+undergrad
+undergrad.long<-gather(undergrad, key="Year", value=Percent_Share, 3:10)
+undergrad.long$UnivDomain=paste(undergrad.long$University, undergrad.long$Domain, sep="-")
+undergrad.long$Percent_Share=round(undergrad.long$Percent_Share*100,2)
+undergrad.long
+#unite(undergrad.long,"Univ-Domain",1,2,sep="-")
+
+
+```
+
+
+```{r}
+library(ggplot2)
+
+ggplot(undergrad.long, aes(x=Year, y=Percent_Growth, group=UnivDomain,colour=UnivDomain)) + geom_line()+xlab("Years")+ylab("Percent of Total")
+#colour=UnivDomain
+```
+
+
+
+
