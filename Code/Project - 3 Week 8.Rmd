@@ -42,7 +42,8 @@ library("kableExtra")
 library("data.table")
 library("tidyr")
 library("lubridate")
-library("XLConnect")
+#library("XLConnectJars")
+#library("XLConnect")
 library("stringr")
 library("formattable")
 library("aRxiv")
@@ -54,6 +55,7 @@ library("igraph")
 library("ggraph")
 library("wordcloud")
 library("curl")
+library("treemap")
 options(scipen = 999)
 
 
@@ -256,7 +258,7 @@ Top 20 keywords in Andrew Ng's publications over the years
 dplt <- ggplot(data=head(aNkw, 20), aes(x = year, y=frequency, fill = keyword)) +
   geom_bar(position="fill", stat = "identity") + 
   ggtitle("top Keywords in Andrew Ng's publications over the years") +
- xlab("Keyword")+
+   xlab("Year")+
   theme(plot.title = element_text(lineheight = .8, face = "bold"))
  dplt + theme(legend.position="right")
 ```
@@ -272,7 +274,7 @@ names(topKeyW)<-c("keyword","frequency")
 ```{r}
 dplt <- ggplot(data=head(topKeyW, 20), aes(x = reorder(keyword, frequency), y=frequency, fill = "steelblue")) +
   geom_bar(stat = "identity") +
- xlab("Keywords")+
+ xlab("Keyword")+
   ylab("Frquency")+
   ggtitle("Andrew Ng's top Keywords without the years") +
   theme(plot.title = element_text(lineheight = .8, face = "bold")) +
@@ -405,10 +407,12 @@ kw1 <- subset(kw, year != '2014' & year != '2015' & year != '2016')
 dplt <- ggplot(data=head(kw1, 20), aes(x = year, y=frequency, fill = keyword)) +
   geom_bar(position="fill", stat = "identity") + 
   ggtitle("top Keywords in Kira Radinsky's publications over the years") +
- xlab("Keyword")+
+ xlab("Year")+
   theme(plot.title = element_text(lineheight = .8, face = "bold"))
  dplt + theme(legend.position="right")
 ```
+ 
+ 
  Top 20 keywords in Kira Radinsky's publications without considering the years
 ```{r}
 kTopics <-as.data.frame(table(allkw))
@@ -417,8 +421,7 @@ names(kTopics) <- c('keyword', 'frequency')
 ```{r}
 dplt <- ggplot(data=head(kTopics, 20), aes(x = reorder(keyword, frequency), y=frequency, fill = "steelblue")) +
   geom_bar(stat = "identity") +
- xlab("Keywords")+
-  xlab("Frequency")+
+ xlab("Keyword")+
   ylab("Frquency")+
   ggtitle("Kira Radinsky's top Keywords without the years") +
   theme(plot.title = element_text(lineheight = .8, face = "bold")) +
